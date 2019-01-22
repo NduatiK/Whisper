@@ -58,12 +58,14 @@ open class WhisperFactory: NSObject {
             var maximumY = navigationController.navigationBar.frame.height
             
             whisperView.transformViews.forEach {
-                $0.frame.origin.y = -10
+                $0.transform = CGAffineTransform(translationX: 0, y: -10)
                 $0.alpha = 0
             }
             
             for subview in navigationController.navigationBar.subviews {
-                if subview.frame.maxY > maximumY && subview.frame.height > 0 { maximumY = subview.frame.maxY }
+                if subview.frame.maxY > maximumY && subview.frame.height > 0 {
+                    maximumY = subview.frame.maxY
+                }
             }
             
             whisperView.frame.origin.y = maximumY

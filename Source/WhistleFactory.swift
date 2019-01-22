@@ -93,20 +93,23 @@ open class WhistleFactory: UIViewController {
         UIApplication.shared.setStatusBarStyle(currentStatusBarStyle, animated: false)
     }
     
-    @objc open func setupFrames() {
-        //whistleWindow = UIWindow()
-        
-        //setupWindow()
-        
+    @objc open func setupFrames(resetWindow: Bool = false) {
+
+        whistleWindow = UIWindow()
+
+        setupWindow()
+
         let labelWidth = UIApplication.shared.delegate?.window??.frame.width ?? UIScreen.main.bounds.width
         let defaultHeight = titleLabelHeight
         
         if let text = titleLabel.text {
-            let neededDimensions = text.boundingRect(
-                with: CGSize(width: labelWidth, height: CGFloat.infinity),
-                options: NSStringDrawingOptions.usesLineFragmentOrigin,
-                attributes: [NSAttributedString.Key.font: titleLabel.font],
-                context: nil)
+            let neededDimensions =
+                NSString(string: text).boundingRect(
+                    with: CGSize(width: labelWidth, height: CGFloat.infinity),
+                    options: NSStringDrawingOptions.usesLineFragmentOrigin,
+                    attributes: [NSAttributedStringKey.font: titleLabel.font],
+                    context: nil
+            )
             titleLabelHeight = CGFloat(neededDimensions.size.height)
             titleLabel.numberOfLines = 0 // Allows unwrapping
             
@@ -172,8 +175,11 @@ open class WhistleFactory: UIViewController {
     
     @objc func orientationDidChange() {
         if whistleWindow.isKeyWindow {
+            hide()
             setupFrames()
-            //hide()
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                self.present()
+            }
         }
     }
     
