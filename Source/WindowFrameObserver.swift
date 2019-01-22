@@ -26,7 +26,7 @@ public class WindowFrameObserver: NSObject {
         }
     }
     
-    public func stopObserving() {
+    @objc public func stopObserving() {
         guard isObserving else { return }
         
         isObserving = false
